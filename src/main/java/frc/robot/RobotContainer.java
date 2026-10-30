@@ -39,11 +39,6 @@ public class RobotContainer {
     controlDriver.b().whileTrue(intake.setVolts(-10))
     .whileFalse(intake.setVolts(0));
 
-    controlDriver.y().onTrue(
-      isIntakeActive ? 
-              intakeActive(0) :
-        intakeActive(10)
-      );
   }
 
   public Command intakeActive(double volts){
