@@ -34,9 +34,8 @@ public class RobotContainer {
   }
 
   private void configureBindings() {
-    controlDriver.a().whileTrue(intake.setVolts(10))
-    .whileFalse(intake.setVolts(0));
-    controlDriver.b().whileTrue(intake.setVolts(-10))
+    controlDriver.a()
+    .whileTrue(intake.setVolts(10))
     .whileFalse(intake.setVolts(0));
 
   }

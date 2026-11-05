@@ -21,7 +21,7 @@ public class ShooterFisico implements ShooterIO {
     @Override
     public void setVoltage(double voltage){
         ShoooterArribaDerecho.setControl(new VoltageOut(-voltage));
-        ShooterArribaIzquierdo
+        ShooterArribaIzquierdo.setControl(new VoltageOut(voltage));
     }
     
 }
