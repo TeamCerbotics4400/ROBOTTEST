@@ -21,6 +21,7 @@ public interface IntakeIO {
     public default void setVoltage(double voltage) {}
 
     public abstract void setPosition(double Rotaciones);
+    
     public abstract void setVelocity (double RPMs);
 
     public abstract void update();
