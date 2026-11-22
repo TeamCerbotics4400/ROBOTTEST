@@ -15,12 +15,17 @@ import frc.robot.Subsystems.Intake.Intake;
 import frc.robot.Subsystems.Intake.IntakeFisico;
 import frc.robot.Subsystems.Intake.IntakeIO;
 import frc.robot.Subsystems.Intake.IntakeSimulado;
+import frc.robot.Subsystems.Parrilla.Parrilla;
+import frc.robot.Subsystems.Parrilla.ParrillaIO;
 import frc.robot.Subsystems.Intake.IntakeIO.IntakeInputs;
 
 public class RobotContainer {
 
   Intake intake;
   IntakeIO intakeIO;
+  
+  Parrilla parrillaroller;
+  ParrillaIO parrillaIO;
 
   CommandXboxController controlDriver = new CommandXboxController(0);
 
@@ -39,7 +44,8 @@ public class RobotContainer {
   private void configureBindings() {
     controlDriver.a()
     .whileTrue(intake.setVelocity(10))
-    .whileFalse(intake.setVelocity(0));
+    .whileFalse(intake.setVelocity(0))
+    ;
 
     controlDriver.b()
     .whileTrue(intake.setPosition(10))
@@ -49,14 +55,9 @@ public class RobotContainer {
     .whileTrue(intake.setVolts(10))
     .whileFalse(intake.setVolts(0));
 
-    controlDriver.leftBumper().onTrue(Commands.runOnce(SignalLogger::start));
-    controlDriver.rightBumper().onTrue(Commands.runOnce(SignalLogger::stop));
-
-    controlDriver.povLeft().whileTrue(intake.sysIdDynamic(Direction.kForward));
-    controlDriver.povUp().whileTrue(intake.sysIdDynamic(Direction.kReverse));
-
-    controlDriver.povRight().whileTrue(intake.sysIdQuasistatic(Direction.kForward));
-    controlDriver.povDown().whileTrue(intake.sysIdQuasistatic(Direction.kReverse));
+    controlDriver.rightTrigger()
+    .whileTrue(parrillaroller.setVolts(-10))
+    .whileFalse(parrillaroller.setVolts(0));
 
     }
     

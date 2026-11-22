@@ -49,7 +49,8 @@ public class Intake extends SubsystemBase {
 
     public Command setPosition(double Rotaciones) {
         return run(
-                () -> io.setPosition(Rotaciones));
+                () -> io.setPosition(Rotaciones)
+                );
     }
 
     public Command sysIdQuasistatic(SysIdRoutine.Direction direction) {
