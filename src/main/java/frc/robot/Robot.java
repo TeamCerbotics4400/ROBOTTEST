@@ -29,16 +29,19 @@ public class Robot extends TimedRobot {
   }
 
   @Override
-  public void disabledInit() {}
+  public void disabledInit() {
+  }
 
   @Override
   public void disabledPeriodic() {
-    //CommandScheduler.getInstance().schedule(Commands.print("EL ROBOT ESTÁ DESHABILITADO"));
+    // CommandScheduler.getInstance().schedule(Commands.print("EL ROBOT ESTÁ
+    // DESHABILITADO"));
   }
 
   @Override
   public void disabledExit() {
-    //CommandScheduler.getInstance().schedule(Commands.print("El robot dejó de estar deshabilitado"));
+    // CommandScheduler.getInstance().schedule(Commands.print("El robot dejó de
+    // estar deshabilitado"));
   }
 
   @Override
@@ -51,10 +54,12 @@ public class Robot extends TimedRobot {
   }
 
   @Override
-  public void autonomousPeriodic() {}
+  public void autonomousPeriodic() {
+  }
 
   @Override
-  public void autonomousExit() {}
+  public void autonomousExit() {
+  }
 
   @Override
   public void teleopInit() {
@@ -65,11 +70,13 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
-    //CommandScheduler.getInstance().schedule(Commands.print("El robot está activo"));
+    // CommandScheduler.getInstance().schedule(Commands.print("El robot está
+    // activo"));
   }
 
   @Override
-  public void teleopExit() {}
+  public void teleopExit() {
+  }
 
   @Override
   public void testInit() {
@@ -77,8 +84,10 @@ public class Robot extends TimedRobot {
   }
 
   @Override
-  public void testPeriodic() {}
+  public void testPeriodic() {
+  }
 
   @Override
-  public void testExit() {}
+  public void testExit() {
+  }
 }
