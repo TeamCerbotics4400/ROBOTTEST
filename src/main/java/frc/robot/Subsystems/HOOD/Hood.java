@@ -1,4 +1,4 @@
-package frc.robot.Subsystems.HOOPER;
+package frc.robot.Subsystems.HOOD;
 
 import static edu.wpi.first.units.Units.Volts;
 
@@ -12,13 +12,13 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Subsystems.Intake.IntakeIO.IntakeInputs;
 
-public class Hooper extends SubsystemBase {
+public class Hood extends SubsystemBase {
 
-    HooperIO io;
+    HoodIO io;
 
     private final SysIdRoutine m_sysIdRoutine;
 
-    public Hooper(HooperIO io) {
+    public Hood(HoodIO io) {
 
         m_sysIdRoutine = new SysIdRoutine(
                 new SysIdRoutine.Config(

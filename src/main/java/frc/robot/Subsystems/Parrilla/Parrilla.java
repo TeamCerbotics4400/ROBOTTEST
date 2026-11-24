@@ -15,7 +15,7 @@ public class Parrilla extends SubsystemBase {
     public Command setVolts(double volts) {
         return run(
                 () -> io.setVoltage(volts)
-        ).alongWith(Commands.print("LA PARRILLA ESTÁ A " + volts));
+        );
     }
     @Override
     public void periodic() {

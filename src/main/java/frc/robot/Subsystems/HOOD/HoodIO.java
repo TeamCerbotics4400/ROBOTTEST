@@ -1,6 +1,6 @@
-package frc.robot.Subsystems.HOOPER;
+package frc.robot.Subsystems.HOOD;
 
-public interface HooperIO {
+public interface HoodIO {
 
     public class HooperInputs {
         public double hooperLeftVoltage = 0;

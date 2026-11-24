@@ -16,31 +16,36 @@ import com.ctre.phoenix6.signals.MotorAlignmentValue;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 
 public class ParrilaFisico implements ParrillaIO {
-    private final TalonFX parrillaroller = new TalonFX(41);
+    private final TalonFX parrillaroller = new TalonFX(41, "canivore");
     private final TalonFXConfiguration parrillTalonFXConfiguration = new TalonFXConfiguration();
     private Parrillainputs inputs = new Parrillainputs();
 
+    private final TalonFX rightfeeder = new TalonFX(40, "canivore");
+    private final TalonFXConfiguration rightfeederTalonFXConfiguration = new TalonFXConfiguration();
+    private Parrillainputs rightfeederInputs = new Parrillainputs();
+
+    private final TalonFX leftfeeder = new TalonFX(42, "canivore");
+    private final TalonFXConfiguration leftfeederTalonFXConfiguration = new TalonFXConfiguration();
+    private Parrillainputs leftfeederInputs = new Parrillainputs();
 
     public ParrilaFisico() {
-        // intake config
 
-      
-        
-
-
-        parrillTalonFXConfiguration.CurrentLimits.StatorCurrentLimit = 12;
+        //parrillTalonFXConfiguration.CurrentLimits.StatorCurrentLimit = 12;
 
         parrillTalonFXConfiguration.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
         parrillaroller.getConfigurator().apply(parrillTalonFXConfiguration);
 
+        rightfeeder.setControl(new Follower(parrillaroller.getDeviceID(), MotorAlignmentValue.Opposed));
+
+         leftfeeder.setControl(new Follower(parrillaroller.getDeviceID(), MotorAlignmentValue.Aligned));
         
     }
 
     @Override
     public void setVoltage(double voltage) {
         parrillaroller.setControl(new VoltageOut(voltage));// Se le puede poner "-" para que vaya al revés
-        // intakeDerecho.setControl(new VoltageOut(-voltage));
-        inputs.parrillaVoltage = parrillaroller.getMotorVoltage().getValueAsDouble();
+     
+        //inputs.parrillaVoltage = parrillaroller.getMotorVoltage().getValueAsDouble();
 
     }
 
