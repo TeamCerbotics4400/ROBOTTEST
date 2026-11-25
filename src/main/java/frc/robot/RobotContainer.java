@@ -15,49 +15,68 @@ import frc.robot.Subsystems.Intake.Intake;
 import frc.robot.Subsystems.Intake.IntakeFisico;
 import frc.robot.Subsystems.Intake.IntakeIO;
 import frc.robot.Subsystems.Intake.IntakeSimulado;
+import frc.robot.Subsystems.Parrilla.ParrilaFisico;
+import frc.robot.Subsystems.Parrilla.Parrilla;
+import frc.robot.Subsystems.Parrilla.ParrillaIO;
+import frc.robot.Subsystems.Shooter.Shooter;
+import frc.robot.Subsystems.Shooter.ShooterFisico;
+import frc.robot.Subsystems.Shooter.ShooterIO;
 import frc.robot.Subsystems.Intake.IntakeIO.IntakeInputs;
 
 public class RobotContainer {
 
   Intake intake;
   IntakeIO intakeIO;
+  
+  Parrilla parrillaroller;
+  ParrillaIO parrillaIO;
 
+
+  Shooter Shooter;
+  ShooterIO ShooterIO;
   CommandXboxController controlDriver = new CommandXboxController(0);
 
   boolean isIntakeActive = false;
   public RobotContainer() {
     if(RobotBase.isReal()){
       intakeIO = new IntakeFisico();
+      parrillaIO = new ParrilaFisico();
+      ShooterIO = new ShooterFisico();
+
     }else{
-      intakeIO = new IntakeSimulado();
     }
 
+
+    parrillaroller = new Parrilla(parrillaIO);
+    Shooter = new Shooter(ShooterIO);
     intake = new Intake(intakeIO);
     configureBindings();
   }
 
   private void configureBindings() {
     controlDriver.a()
-    .whileTrue(intake.setVelocity(10))
-    .whileFalse(intake.setVelocity(0));
-
-    controlDriver.b()
-    .whileTrue(intake.setPosition(10))
-    .whileFalse(intake.setPosition(-10));
-
-    controlDriver.leftTrigger()
     .whileTrue(intake.setVolts(10))
     .whileFalse(intake.setVolts(0));
 
-    controlDriver.leftBumper().onTrue(Commands.runOnce(SignalLogger::start));
-    controlDriver.rightBumper().onTrue(Commands.runOnce(SignalLogger::stop));
 
-    controlDriver.povLeft().whileTrue(intake.sysIdDynamic(Direction.kForward));
-    controlDriver.povUp().whileTrue(intake.sysIdDynamic(Direction.kReverse));
+    controlDriver.y()
+    .whileTrue(parrillaroller.setVolts(10))
+    .whileFalse(parrillaroller.setVolts(0));
 
-    controlDriver.povRight().whileTrue(intake.sysIdQuasistatic(Direction.kForward));
-    controlDriver.povDown().whileTrue(intake.sysIdQuasistatic(Direction.kReverse));
+    controlDriver.x()
+    .whileTrue(Shooter.setVolts(3))
+    .whileFalse(Shooter.setVolts(0));
 
+
+    controlDriver.leftBumper().onTrue(Commands.runOnce(SignalLogger::start).andThen(Commands.print("Graba datos de prueba")));//Iniciar Record
+    
+    controlDriver.rightBumper().onTrue(Commands.runOnce(SignalLogger::stop).andThen(Commands.print("Termina de grabar datos")) );//Terminar Record
+
+    controlDriver.povLeft().whileTrue(Shooter.sysIdDynamic(Direction.kForward));
+    controlDriver.povUp().whileTrue(Shooter.sysIdDynamic(Direction.kReverse));
+
+    controlDriver.povRight().whileTrue(Shooter.sysIdQuasistatic(Direction.kForward));
+    controlDriver.povDown().whileTrue(Shooter.sysIdQuasistatic(Direction.kReverse));
     }
     
 

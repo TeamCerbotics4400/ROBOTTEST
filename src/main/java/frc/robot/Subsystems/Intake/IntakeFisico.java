@@ -74,7 +74,7 @@ public class IntakeFisico implements IntakeIO {
 
     @Override
     public void setVelocity(double RPMs) {
-        intakeIzquierdo.setControl(new VelocityVoltage(RPMs).withSlot(0));
+        intakeIzquierdo.setControl(new VelocityVoltage(RPMs/60).withSlot(0));
         // intakeDerecho.setControl(new VelocityVoltage(RPMs).withSlot(0));
     }
 
