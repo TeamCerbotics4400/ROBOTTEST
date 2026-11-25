@@ -26,7 +26,7 @@ public class Shooter extends SubsystemBase {
                         Volts.of(4), // Reduce dynamic step voltage to 4 to prevent brownout
                         null, // Use default timeout (10 s)
                               // Log state with Phoenix SignalLogger class
-                        (state) -> SignalLogger.writeString("state", state.toString())),
+                        (state) -> SignalLogger.writeString("SHOOTER_state", state.toString())),
                 new SysIdRoutine.Mechanism(
                         (volts) -> io.setVoltage(volts.in(Volts)),
                         null,
@@ -67,6 +67,7 @@ public class Shooter extends SubsystemBase {
         SmartDashboard.putNumber("Voltaje Shooter", io.getInputs().shooterLeftVoltage);
         SmartDashboard.putNumber("Shooter/Posicion", io.getInputs().shooterPosition);
         SmartDashboard.putNumber("Shooter/Velocidad", io.getInputs().shooterVelocity);
+        SmartDashboard.putNumber("Shooter/Corriente", io.getInputs().shootercurrent);
 
         io.update();
     }

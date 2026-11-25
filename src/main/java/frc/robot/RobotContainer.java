@@ -66,6 +66,17 @@ public class RobotContainer {
     controlDriver.x()
     .whileTrue(Shooter.setVolts(3))
     .whileFalse(Shooter.setVolts(0));
+
+
+    controlDriver.leftBumper().onTrue(Commands.runOnce(SignalLogger::start).andThen(Commands.print("Graba datos de prueba")));//Iniciar Record
+    
+    controlDriver.rightBumper().onTrue(Commands.runOnce(SignalLogger::stop).andThen(Commands.print("Termina de grabar datos")) );//Terminar Record
+
+    controlDriver.povLeft().whileTrue(Shooter.sysIdDynamic(Direction.kForward));
+    controlDriver.povUp().whileTrue(Shooter.sysIdDynamic(Direction.kReverse));
+
+    controlDriver.povRight().whileTrue(Shooter.sysIdQuasistatic(Direction.kForward));
+    controlDriver.povDown().whileTrue(Shooter.sysIdQuasistatic(Direction.kReverse));
     }
     
 

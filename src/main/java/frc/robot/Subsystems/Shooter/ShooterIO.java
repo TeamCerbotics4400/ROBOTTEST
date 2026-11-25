@@ -7,6 +7,7 @@ public interface ShooterIO {
         public double shooterRightVoltage = 0;
         public double shooterPosition = 0;
         public double shooterVelocity = 0;
+        public double shootercurrent = 0;
 
         public double P = 2.8;
         public double I = 0;
