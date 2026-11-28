@@ -5,6 +5,7 @@ import static edu.wpi.first.units.Units.Volts;
 
 import com.ctre.phoenix6.SignalLogger;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.controls.VelocityVoltage;
@@ -13,63 +14,97 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.MotorAlignmentValue;
 
+import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 
+
 public class HoodFisico implements HoodIO {
-    private final TalonFX hooper = new TalonFX(34);//ID's provisonales
-    private final TalonFXConfiguration hooperConfig = new TalonFXConfiguration();
-    private HooperInputs inputs = new HooperInputs();
+
+    public double minangle = 27;
+    public double maxangle = 54;
+
+    private final TalonFX hood = new TalonFX(34, "canivore");//ID's provisonales
+    private final TalonFXConfiguration hoodConfig = new TalonFXConfiguration();
+    private HoodInputs inputs = new HoodInputs();
+
+    TrapezoidProfile.Constraints constraints = new TrapezoidProfile.Constraints(3, 3);
+    ProfiledPIDController pid = new ProfiledPIDController(inputs.P,inputs.I, inputs.D , constraints);
+
+
 
 
     public HoodFisico() {
         // hooper config
 
-        hooper.setPosition(0);
+        hood.setPosition(0);
+
+        hoodConfig.SoftwareLimitSwitch.ForwardSoftLimitThreshold = 5;
+        hoodConfig.SoftwareLimitSwitch.ForwardSoftLimitEnable = true;
+
+        hoodConfig.SoftwareLimitSwitch.ReverseSoftLimitThreshold = 0;
+        hoodConfig.SoftwareLimitSwitch.ReverseSoftLimitEnable = true;
         
 
-        hooperConfig.Slot0.kP = inputs.P;
-        hooperConfig.Slot0.kI = inputs.I;
-        hooperConfig.Slot0.kD = inputs.D;
+        hoodConfig.Slot0.kP = inputs.P;
+        hoodConfig.Slot0.kI = inputs.I;
+        hoodConfig.Slot0.kD = inputs.D;
         
-        hooperConfig.CurrentLimits.StatorCurrentLimit = 100;
 
-        hooperConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
-        hooper.getConfigurator().apply(hooperConfig);
+        hoodConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
+        hood.getConfigurator().apply(hoodConfig);
 
         
 
     }
+
+    
 
     @Override
     public void setVoltage(double voltage) {
-        hooper.setControl(new VoltageOut(voltage));// Se le puede poner "-" para que vaya al revés
+        hood.setControl(new VoltageOut(voltage));// Se le puede poner "-" para que vaya al revés
         // hooperDerecho.setControl(new VoltageOut(-voltage));
-        inputs.hooperLeftVoltage = hooper.getMotorVoltage().getValueAsDouble();
+        inputs.hoodLeftVoltage = hood.getMotorVoltage().getValueAsDouble();
 
     }
 
     @Override
-    public HooperInputs getInputs() {
+    public HoodInputs getInputs() {
         return inputs;
+    }
+
+    public void setPositionDegrees(double angle){
+        double rotaciones = gradosaRotaciones(angle);
+        setPosition(rotaciones);
     }
 
     @Override
     public void setPosition(double Rotaciones) {
-        hooper.setControl(new PositionVoltage(Rotaciones).withSlot(0));
+        pid.setGoal(Rotaciones);
+        double salida = pid.calculate(hood.getPosition().getValueAsDouble());
+
+
+        hood.setControl(new DutyCycleOut(salida));
         // hooperDerecho.setControl(new PositionVoltage(Rotaciones).withSlot(0));
     }
 
     @Override
     public void setVelocity(double RPMs) {
-        hooper.setControl(new VelocityVoltage(RPMs/60).withSlot(0));
+        hood.setControl(new VelocityVoltage(RPMs/60).withSlot(0));
         // hooperDerecho.setControl(new VelocityVoltage(RPMs).withSlot(0));
     }
 
     @Override
+    public double gradosaRotaciones(double angulo){
+             return (angulo - 27)*(5 - 0)/(54 - 27);
+
+    }
+
+    @Override
     public void update() {
-        inputs.hooperPosition = hooper.getPosition().getValueAsDouble();
-        inputs.hooperVelocity = hooper.getVelocity().getValueAsDouble();
-        inputs.hooperLeftVoltage = hooper.getMotorVoltage().getValueAsDouble();
-        inputs.hooperRightVoltage = hooper.getMotorVoltage().getValueAsDouble();
+        inputs.hoodPosition = hood.getPosition().getValueAsDouble();
+        inputs.hoodVelocity = hood.getVelocity().getValueAsDouble();
+        inputs.hoodLeftVoltage = hood.getMotorVoltage().getValueAsDouble();
+        inputs.hoodRightVoltage = hood.getMotorVoltage().getValueAsDouble();
     }
 }

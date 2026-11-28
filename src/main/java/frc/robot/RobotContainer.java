@@ -11,6 +11,9 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
+import frc.robot.Subsystems.HOOD.Hood;
+import frc.robot.Subsystems.HOOD.HoodFisico;
+import frc.robot.Subsystems.HOOD.HoodIO;
 import frc.robot.Subsystems.Intake.Intake;
 import frc.robot.Subsystems.Intake.IntakeFisico;
 import frc.robot.Subsystems.Intake.IntakeIO;
@@ -34,22 +37,25 @@ public class RobotContainer {
 
   Shooter Shooter;
   ShooterIO ShooterIO;
+
+  Hood hood;
+  HoodIO hoodIO;
+
   CommandXboxController controlDriver = new CommandXboxController(0);
 
   boolean isIntakeActive = false;
   public RobotContainer() {
-    if(RobotBase.isReal()){
       intakeIO = new IntakeFisico();
       parrillaIO = new ParrilaFisico();
       ShooterIO = new ShooterFisico();
+      hoodIO = new HoodFisico();
 
-    }else{
-    }
 
 
     parrillaroller = new Parrilla(parrillaIO);
     Shooter = new Shooter(ShooterIO);
     intake = new Intake(intakeIO);
+    hood = new Hood(hoodIO);
     configureBindings();
   }
 
@@ -67,7 +73,12 @@ public class RobotContainer {
     .whileTrue(Shooter.setVolts(3))
     .whileFalse(Shooter.setVolts(0));
 
+     controlDriver.leftBumper().onTrue(Shooter.setVelocity(3000)).onFalse(Shooter.setVelocity(0)) ;
 
+     controlDriver.rightBumper().onTrue(hood.setPosition(3)).onFalse(hood.setPosition(0));
+  
+
+/* 
     controlDriver.leftBumper().onTrue(Commands.runOnce(SignalLogger::start).andThen(Commands.print("Graba datos de prueba")));//Iniciar Record
     
     controlDriver.rightBumper().onTrue(Commands.runOnce(SignalLogger::stop).andThen(Commands.print("Termina de grabar datos")) );//Terminar Record
@@ -77,6 +88,8 @@ public class RobotContainer {
 
     controlDriver.povRight().whileTrue(Shooter.sysIdQuasistatic(Direction.kForward));
     controlDriver.povDown().whileTrue(Shooter.sysIdQuasistatic(Direction.kReverse));
+
+    */
     }
     
 

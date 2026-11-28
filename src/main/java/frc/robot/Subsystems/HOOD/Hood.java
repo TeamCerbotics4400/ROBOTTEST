@@ -1,5 +1,6 @@
 package frc.robot.Subsystems.HOOD;
 
+import static edu.wpi.first.units.Units.Second;
 import static edu.wpi.first.units.Units.Volts;
 
 import com.ctre.phoenix6.SignalLogger;
@@ -22,11 +23,11 @@ public class Hood extends SubsystemBase {
 
         m_sysIdRoutine = new SysIdRoutine(
                 new SysIdRoutine.Config(
-                        null, // Use default ramp rate (1 V/s)
-                        Volts.of(4), // Reduce dynamic step voltage to 4 to prevent brownout
+                        Volts.of(0.5).per(Second), // Use default ramp rate (1 V/s)
+                        Volts.of(1.5), // Reduce dynamic step voltage to 4 to prevent brownout
                         null, // Use default timeout (10 s)
                               // Log state with Phoenix SignalLogger class
-                        (state) -> SignalLogger.writeString("state", state.toString())),
+                        (state) -> SignalLogger.writeString("Hood state", state.toString())),
                 new SysIdRoutine.Mechanism(
                         (volts) -> io.setVoltage(volts.in(Volts)),
                         null,
@@ -39,7 +40,7 @@ public class Hood extends SubsystemBase {
         return run(
                 () -> io.setVoltage(volts)
 
-        ).alongWith(Commands.print("EL HOOPER ESTÁ A " + volts));
+        ).alongWith(Commands.print("EL hood ESTÁ A " + volts));
     }
 
     public Command setVelocity(double RPMs) {
@@ -64,9 +65,9 @@ public class Hood extends SubsystemBase {
     @Override
     public void periodic() {
 
-        SmartDashboard.putNumber("Voltaje Hooper", io.getInputs().hooperLeftVoltage);
-        SmartDashboard.putNumber("Hooper/Posicion", io.getInputs().hooperPosition);
-        SmartDashboard.putNumber("Hooper/Velocidad", io.getInputs().hooperVelocity);
+        SmartDashboard.putNumber("Voltaje Hood", io.getInputs().hoodLeftVoltage);
+        SmartDashboard.putNumber("Hood/Posicion", io.getInputs().hoodPosition);
+        SmartDashboard.putNumber("Hood/Velocidad", io.getInputs().hoodVelocity);
 
         io.update();
     }

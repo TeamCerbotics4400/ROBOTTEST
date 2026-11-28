@@ -14,6 +14,7 @@ public interface IntakeIO {
         public double kS = 0;
         public double kV = 0;
         public double kA = 0;
+        public double shooterVelocity;
 
 
     }
